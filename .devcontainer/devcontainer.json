@@ -3,5 +3,16 @@
   "features": {
     "ghcr.io/devcontainers-extra/features/terraform-asdf:2": {},
     "ghcr.io/dhoeric/features/google-cloud-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "manishsencha.readme-preview",
+        "github.vscode-github-actions",
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "hashicorp.terraform"
+      ]
+    }
   }
 }

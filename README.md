@@ -81,35 +81,42 @@ This repository includes a GitHub Actions workflow (`.github/workflows/terraform
 
 Push changes to the `main` branch or manually trigger the workflow from the Actions tab.
 
-Using GitHub Codespaces
+## Using GitHub Codespaces
 GitHub Codespaces provides a cloud-based development environment where you can deploy the infrastructure without setting up Terraform locally.
 
 Steps to Use Codespaces
 Open the Repository in Codespaces:
 
-Click the Code button in your repository and select Codespaces.
+1. Click the Code button in your repository and select Codespaces.
 Create a new Codespace or open an existing one.
 Authenticate with GCP:
 
-Ensure the GCP_CREDENTIALS secret is added to your repository under Settings > Secrets and variables > Codespaces.
+2. Ensure the GCP_CREDENTIALS secret is added to your repository under Settings > Secrets and variables > Codespaces.
 In the Codespace terminal, authenticate with GCP:
 
-```echo $GCP_CREDENTIALS > gcp-key.json
+```sh
+echo $GCP_CREDENTIALS > gcp-key.json
 gcloud auth activate-service-account --key-file=gcp-key.json
-gcloud config set project $GCP_PROJECT_ID```
+gcloud config set project $GCP_PROJECT_ID
+```
 
 3. Run Terraform Commands:
 
 Initialize Terraform:
-```terraform init```
+```sh
+terraform init
+```
 Plan and apply the infrastructure:
-```terraform plan
-terraform apply --auto-approve```
+```sh
+terraform plan
+terraform apply --auto-approve
+```
 
 4. Clean Up:
 
 Remove the gcp-key.json file after use:
-```rm gcp-key.json
+```sh
+rm gcp-key.json
 ```
 ## Passing GCP Credentials from GitHub Secrets
 To securely pass GCP credentials to your workflows or Codespaces:
@@ -128,7 +135,8 @@ In GitHub Actions workflows, use the secrets as environment variables or inputs:
 - name: Authenticate with Google Cloud
   uses: google-github-actions/auth@v1
   with:
-    credentials_json: ${{ secrets.GCP_CREDENTIALS }}```
+    credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+```
 
 3. Access Secrets in Codespaces:
 
