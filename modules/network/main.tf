@@ -1,4 +1,11 @@
+data "google_compute_networks" "existing_vpc" {
+  name = "gke-vpc-network" # Replace with your VPC name
+}
+
 resource "google_compute_network" "vpc_network" {
+  # Create a new VPC network if it doesn't exist
+  count = data.google_compute_networks.existing_vpc.items.length == 0 ? 1 : 0
+
   name = "gke-vpc-network"
 }
 
