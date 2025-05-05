@@ -18,11 +18,11 @@ variable "cluster_name" {
 variable "node_count" {
   description = "The number of nodes in the cluster"
   type        = number
-  default     = 3
+  default     = 1
 }
 
 variable "machine_type" {
   description = "The machine type for the cluster nodes"
   type        = string
-  default     = "e2-medium"
+  default     = "e2-micro"
 }

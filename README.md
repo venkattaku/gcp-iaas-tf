@@ -81,9 +81,67 @@ This repository includes a GitHub Actions workflow (`.github/workflows/terraform
 
 Push changes to the `main` branch or manually trigger the workflow from the Actions tab.
 
+Using GitHub Codespaces
+GitHub Codespaces provides a cloud-based development environment where you can deploy the infrastructure without setting up Terraform locally.
+
+Steps to Use Codespaces
+Open the Repository in Codespaces:
+
+Click the Code button in your repository and select Codespaces.
+Create a new Codespace or open an existing one.
+Authenticate with GCP:
+
+Ensure the GCP_CREDENTIALS secret is added to your repository under Settings > Secrets and variables > Codespaces.
+In the Codespace terminal, authenticate with GCP:
+
+```echo $GCP_CREDENTIALS > gcp-key.json
+gcloud auth activate-service-account --key-file=gcp-key.json
+gcloud config set project $GCP_PROJECT_ID```
+
+3. Run Terraform Commands:
+
+Initialize Terraform:
+```terraform init```
+Plan and apply the infrastructure:
+```terraform plan
+terraform apply --auto-approve```
+
+4. Clean Up:
+
+Remove the gcp-key.json file after use:
+```rm gcp-key.json
+```
+## Passing GCP Credentials from GitHub Secrets
+To securely pass GCP credentials to your workflows or Codespaces:
+
+1. Add Secrets to the Repository:
+
+Go to Settings > Secrets and variables > Actions or Codespaces.
+Add the following secrets:
+GCP_CREDENTIALS: Paste the JSON key of your GCP service account.
+GCP_PROJECT_ID: Add your GCP project ID.
+
+2. Access Secrets in Workflows:
+
+In GitHub Actions workflows, use the secrets as environment variables or inputs:
+```
+- name: Authenticate with Google Cloud
+  uses: google-github-actions/auth@v1
+  with:
+    credentials_json: ${{ secrets.GCP_CREDENTIALS }}```
+
+3. Access Secrets in Codespaces:
+
+Secrets are automatically available as environment variables in Codespaces. Use them as shown in the Codespaces section above.
+
 ## Development Environment
 
-A development container configuration (`.devcontainer/devcontainer.json`) is included for Visual Studio Code. It sets up a containerized environment with Terraform pre-installed.
+A development container configuration (.devcontainer/devcontainer.json) is included for Visual Studio Code. It sets up a containerized environment with Terraform pre-installed.
+
+Using Dev Containers
+1. Install the Dev Containers extension in VS Code.
+2. Open the repository in VS Code.
+3. Reopen the folder in the dev container.
 
 ### Using Dev Containers
 

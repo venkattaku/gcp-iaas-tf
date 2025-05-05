@@ -1,0 +1,5 @@
+.terraform.lock.hcl
+gcp-key.json
+terraform.tfstate
+terraform.tfstate.backup
+.terraform
