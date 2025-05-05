@@ -1,0 +1,54 @@
+name: Terraform Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    name: Terraform Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Setup Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      # Step 3: Authenticate with Google Cloud
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      # Step 4: Set up Google Cloud project
+      - name: Set Google Cloud Project
+        run: gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+
+      # Step 5: Initialize Terraform
+      - name: Terraform Init
+        run: terraform init
+
+      # Step 6: Create terraform.tfvars file from secrets
+      - name: Create terraform.tfvars
+        run: |
+          echo "project_id = \"${{ secrets.GCP_PROJECT_ID }}\"" > terraform.tfvars
+          echo "region = \"us-central1\"" >> terraform.tfvars
+          echo "cluster_name = \"my-gke-cluster\"" >> terraform.tfvars
+          echo "node_count = 3" >> terraform.tfvars
+          echo "machine_type = \"e2-medium\"" >> terraform.tfvars
+
+      # Step 7: Terraform Plan
+      - name: Terraform Plan
+        run: terraform plan -var-file=terraform.tfvars
+
+      # Step 8: Terraform Apply
+      - name: Terraform Apply
+        run: terraform apply -var-file=terraform.tfvars -auto-approve
